@@ -3,7 +3,6 @@ import tensorflow as tf
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Conv2D, BatchNormalization, Activation, Input, GlobalAveragePooling2D, Dense, \
     Softmax, add, Lambda, concatenate
-from tensorflow_addons.optimizers import AdamW
 from tensorflow.keras.initializers import he_normal
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.activations import relu
@@ -103,3 +102,4 @@ class ResNeXtModel:
 
     def get_model(self):
         return self.model
+

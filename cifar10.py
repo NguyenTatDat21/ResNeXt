@@ -1,10 +1,11 @@
 import numpy as np
 import tensorflow as tf
-from resnext import ResNeXtModel
 from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import ReduceLROnPlateau
 import matplotlib.pyplot as plt
+
+from resnext import ResNeXtModel
 
 print(tf.__version__)
 
@@ -21,15 +22,10 @@ generator = ImageDataGenerator(rotation_range=15,
                                horizontal_flip=True)
 
 generator.fit(x_train)
-batch_size = 100
+batch_size = 250
 
-lr_reducer = ReduceLROnPlateau(monitor='val_loss', factor=np.sqrt(0.1), cooldown=0, patience=10, min_lr=1e-6)
+lr_reducer = ReduceLROnPlateau(monitor='loss', factor=np.sqrt(0.1), cooldown=0, patience=1, min_lr=1e-6)
 
 callbacks = [lr_reducer]
-model = ResNeXtModel(input_shape=input_shape, nb_classes=10, structure=[3, 3, 3], cardinality=8, width=4).get_model()
-model.fit(generator.flow(x_train, y_train, batch_size=batch_size), steps_per_epoch=len(x_train) // batch_size, epochs=300, callbacks=callbacks, validation_data=(x_test, y_test), validation_steps=x_test.shape[0] // batch_size, verbose=2)
-
-
-
-
-
+model = ResNeXtModel(input_shape=input_shape, nb_classes=10, structure=[3, 3, 3], cardinality=16, width=4).get_model()
+history = model.fit(generator.flow(x_train, y_train, batch_size=batch_size), steps_per_epoch=len(x_train) // batch_size, epochs=100, callbacks=callbacks, validation_data=(x_test, y_test), validation_steps=x_test.shape[0] // batch_size, verbose=2)
